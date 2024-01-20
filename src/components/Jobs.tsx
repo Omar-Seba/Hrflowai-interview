@@ -15,9 +15,7 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
     <>
       <div className="jobs-list">
         {jobs.map((job: JobListing) => (
-          <>
-            <JobCard key={job.id} job={job} />
-          </>
+          <JobCard key={job.id} job={job} />
         ))}
       </div>
     </>

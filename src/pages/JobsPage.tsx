@@ -10,6 +10,7 @@ import {
 } from "@dnd-kit/sortable";
 import { Categories, useLocalStorage } from "../utils/LocalStorage";
 import { StoredKeys } from "../utils/LocalStorage";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 const options = {
   method: "GET",
@@ -157,8 +158,11 @@ const JobsPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col m-4">
-      <h1 className=" text-center text-2xl font-bold text-green-600">
+    <div
+      className="flex flex-col gap-6 p-4 bg-white md:mx-32 lg:mx-64 md:p-6 dark:bg-green-800"
+      // className="flex flex-col m-4"
+    >
+      <h1 className="text-2xl font-bold text-center text-cyan-600 ">
         HrFlow.ai
       </h1>
       <div>
@@ -167,7 +171,7 @@ const JobsPage: React.FC = () => {
           placeholder="Search jobs by name..."
           value={searchTerm}
           onChange={handleSearchChange}
-          className="input border-2 border-transparent border-b-neutral-500 ml-5" // Add Tailwind CSS classes as needed
+          className="ml-5 border-2 border-transparent input border-b-neutral-500" // Add Tailwind CSS classes as needed
         />
         <select
           value={selectedCategory}
@@ -194,7 +198,11 @@ const JobsPage: React.FC = () => {
           ))}
         </select>
       </div>
-      <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+      <DndContext
+        modifiers={[restrictToVerticalAxis]}
+        collisionDetection={closestCenter}
+        onDragEnd={onDragEnd}
+      >
         <SortableContext items={filtred} strategy={verticalListSortingStrategy}>
           <JobsList jobs={filtred} />
         </SortableContext>
