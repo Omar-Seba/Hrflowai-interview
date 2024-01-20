@@ -3,6 +3,7 @@ import { JobListing, Tags } from "../types/jobs"; // Import the interfaces from 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { MdDragIndicator } from "react-icons/md";
+import { FaClock } from "react-icons/fa6";
 
 import {
   Card,
@@ -19,6 +20,13 @@ import {
   AccordionTrigger,
 } from "./../components/ui/accordion";
 import { Button } from "./ui/button";
+import moment from "moment";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@radix-ui/react-tooltip";
 
 interface JobCardProps {
   job: JobListing;
@@ -29,6 +37,10 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     useSortable({ id: job.id });
 
   const style = { transition, transform: CSS.Transform.toString(transform) };
+
+  const formatDateToNow = (date: string) => {
+    return moment(date).fromNow();
+  };
 
   const formatDate = (dateString: string): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -82,9 +94,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               <p>
                 <strong>Location:</strong> {job.location.text}
               </p>
-              <p>
-                <strong>Created At:</strong> {formatDate(job.created_at)}
-              </p>
+              <p></p>
 
               <p className="text-justify">
                 <strong>Summary:</strong> {job.summary}
@@ -105,12 +115,29 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               </p>
             </CardContent>
           </AccordionContent>
-          <CardFooter className="flex flex-row-reverse justify-between py-3 bg-gray-200 h-14">
+          <CardFooter className="flex flex-row justify-between py-3 bg-gray-100 h-14">
             <AccordionTrigger>
-              <Button className="h-8">
+              <Button className="h-8 bg-cyan-500">
                 {accordionState ? "View details" : "Hide"}
               </Button>
             </AccordionTrigger>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <h1 className="flex flex-row">
+                    <FaClock
+                      size={18}
+                      className="inline-block mr-2 align-bottom"
+                    />
+                    {formatDateToNow(job.created_at)}
+                  </h1>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <h1 className="h-8">{formatDate(job.created_at)}</h1>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </CardFooter>
         </AccordionItem>
       </Card>

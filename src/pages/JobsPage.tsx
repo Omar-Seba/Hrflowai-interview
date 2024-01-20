@@ -11,6 +11,23 @@ import {
 import { Categories, useLocalStorage } from "../utils/LocalStorage";
 import { StoredKeys } from "../utils/LocalStorage";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@radix-ui/react-select";
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
+import { Link, BriefcaseIcon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+} from "@radix-ui/react-dropdown-menu";
 
 const options = {
   method: "GET",
@@ -165,7 +182,25 @@ const JobsPage: React.FC = () => {
       <h1 className="text-2xl font-bold text-center text-cyan-600 ">
         HrFlow.ai
       </h1>
-      <div>
+      {/* <div>
+        <Select>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">All Categories</SelectItem>
+            {categories.map((category) => (
+              <SelectItem key={category} value={category}>
+                {category}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <select
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+          className="category-dropdown"
+        ></select>
         <input
           type="text"
           placeholder="Search jobs by name..."
@@ -173,18 +208,6 @@ const JobsPage: React.FC = () => {
           onChange={handleSearchChange}
           className="ml-5 border-2 border-transparent input border-b-neutral-500" // Add Tailwind CSS classes as needed
         />
-        <select
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-          className="category-dropdown"
-        >
-          <option value="">All Categories</option>
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
         Sort by :{" "}
         <select
           value={sortCriteria}
@@ -197,7 +220,62 @@ const JobsPage: React.FC = () => {
             </option>
           ))}
         </select>
-      </div>
+      </div> */}
+      <header className="flex items-center justify-between h-20 px-4 md:px-6">
+        <Link className="flex items-center" href="#">
+          <BriefcaseIcon className="w-6 h-6" />
+          <span className="sr-only">Job Portal</span>
+        </Link>
+        <div className="flex-1 mx-6">
+          <form className="flex items-center">
+            <Input
+              className="flex-1"
+              placeholder="Search jobs..."
+              type="search"
+            />
+          </form>
+        </div>
+        <div className="flex items-center space-x-4">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">Location</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[200px]">
+              <DropdownMenuRadioGroup value="all">
+                <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="san-francisco">
+                  San Francisco
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="new-york">
+                  New York
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="london">
+                  London
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">Category</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[200px]">
+              <DropdownMenuRadioGroup value="all">
+                <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="engineering">
+                  Engineering
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="design">
+                  Design
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="product">
+                  Product
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </header>
       <DndContext
         modifiers={[restrictToVerticalAxis]}
         collisionDetection={closestCenter}
