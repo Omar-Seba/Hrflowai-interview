@@ -16,16 +16,15 @@ export enum Categories {
   SoftwareEngineering = "Software Engineering",
 }
 
-export enum Criteria {
-  default = "",
-  Name = "name",
-  CreationDate = "creationDate",
-  Category = "category",
+export enum Criterias {
+  Name = "Name",
+  CreationDate = "Creation date",
+  Category = "Category",
 }
 
 interface myLocalStorageContent {
   selectedCategory: Categories;
-  sortCriteria: Criteria;
+  sortCriteria: Criterias;
   searchTerm: string;
 }
 

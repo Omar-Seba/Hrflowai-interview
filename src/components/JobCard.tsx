@@ -26,7 +26,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@radix-ui/react-tooltip";
+} from "../components/ui/tooltip";
 
 interface JobCardProps {
   job: JobListing;
@@ -115,7 +115,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               </p>
             </CardContent>
           </AccordionContent>
-          <CardFooter className="flex flex-row justify-between py-3 bg-gray-100 h-14">
+          <CardFooter className="flex flex-row justify-between py-3 bg-gray-100 rounded-b-2 h-14">
             <AccordionTrigger>
               <Button className="h-8 bg-cyan-500">
                 {accordionState ? "View details" : "Hide"}

@@ -3,12 +3,15 @@ import React, { useEffect, useState } from "react";
 import JobsList from "../components/Jobs";
 import { JobListing, JobsResponse } from "../types/jobs";
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
+import { AiOutlineClear } from "react-icons/ai";
+import { FaSearch } from "react-icons/fa";
+
 import {
   SortableContext,
   verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
-import { Categories, useLocalStorage } from "../utils/LocalStorage";
+import { Categories, Criterias, useLocalStorage } from "../utils/LocalStorage";
 import { StoredKeys } from "../utils/LocalStorage";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
@@ -17,7 +20,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@radix-ui/react-select";
+} from "../components/ui/select";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Link, BriefcaseIcon } from "lucide-react";
@@ -27,30 +30,13 @@ import {
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-} from "@radix-ui/react-dropdown-menu";
-
-const options = {
-  method: "GET",
-  headers: {
-    accept: "application/json",
-    "X-API-KEY": "askr_dbfb6f33e7d3c6b6e334b2d420f81465",
-    "X-USER-EMAIL": "",
-  },
-};
-const boardKeys = ["887595b735d68f0bc0b0b0535f7d8f7d158a3f4e"]; // Replace with your actual board key
-
-const categories = [
-  "AI / Research & Development",
-  "Artificial Intelligence",
-  "Financial Services",
-  "Human Resources",
-  "Software Engineering",
-];
+} from "../components/ui/dropdown-menu";
+import { boardKeys, options } from "../lib/apiKeys";
 
 const JobsPage: React.FC = () => {
   //TODO
   const [isLoading, setLoading] = useState(false);
-
+  const [meta, setMeta] = useState();
   const [jobs, setJobs] = useState<JobListing[]>([]);
   const [filtred, setFiltred] = useState<JobListing[]>([]);
   const [selectedCategory, setSelectedCategory] = useLocalStorage(
@@ -69,15 +55,21 @@ const JobsPage: React.FC = () => {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
-  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortCriteria(event.target.value);
+  const handleSortChange = (value: string) => {
+    setSortCriteria(value);
   };
 
-  const handleCategoryChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setSelectedCategory(event.target.value);
+  const handleCategoryChange = (value: string) => {
+    if (value === selectedCategory) return setSelectedCategory(""); // Toggle category
+    setSelectedCategory(value);
   };
+
+  const clearAllFilters = () => {
+    setSelectedCategory("");
+    setSortCriteria("");
+    setSearchTerm("");
+  };
+
   const reitriveJobBoard = async () => {
     try {
       const boardKeysParam = encodeURIComponent(JSON.stringify(boardKeys));
@@ -96,30 +88,10 @@ const JobsPage: React.FC = () => {
       console.error("Error fetching jobs:", err);
     }
   };
-  // const onDragEnd = (result: any) => {
-  //   if (!filtred) return;
-  //   const { source, destination } = result;
 
-  //   // If dropped outside the list or in the same position, do nothing
-  //   if (!destination || destination.index === source.index) {
-  //     return;
-  //   }
-
-  //   // Create a new array with the same items as the original
-  //   const reorderedJobs = Array.from(filtred);
-
-  //   // Remove the dragged item from its original position
-  //   const [reorderedItem] = reorderedJobs.splice(source.index, 1);
-
-  //   // Insert the dragged item into its new position
-  //   reorderedJobs.splice(destination.index, 0, reorderedItem);
-
-  //   // Update the state with the newly reordered jobs array
-  //   setFiltred(reorderedJobs);
-  // };
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (!over || active.id == over.id) return;
+    if (!over || active.id === over.id) return;
 
     setSelectedCategory("");
 
@@ -175,105 +147,64 @@ const JobsPage: React.FC = () => {
   }, []);
 
   return (
-    <div
-      className="flex flex-col gap-6 p-4 bg-white md:mx-32 lg:mx-64 md:p-6 dark:bg-green-800"
-      // className="flex flex-col m-4"
-    >
-      <h1 className="text-2xl font-bold text-center text-cyan-600 ">
-        HrFlow.ai
-      </h1>
-      {/* <div>
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Sort by" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">All Categories</SelectItem>
-            {categories.map((category) => (
-              <SelectItem key={category} value={category}>
-                {category}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <select
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-          className="category-dropdown"
-        ></select>
-        <input
-          type="text"
-          placeholder="Search jobs by name..."
-          value={searchTerm}
-          onChange={handleSearchChange}
-          className="ml-5 border-2 border-transparent input border-b-neutral-500" // Add Tailwind CSS classes as needed
-        />
-        Sort by :{" "}
-        <select
-          value={sortCriteria}
-          onChange={handleSortChange}
-          className="sort-dropdown"
-        >
-          {Object.values(Categories).map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
-      </div> */}
-      <header className="flex items-center justify-between h-20 px-4 md:px-6">
-        <Link className="flex items-center" href="#">
-          <BriefcaseIcon className="w-6 h-6" />
-          <span className="sr-only">Job Portal</span>
-        </Link>
-        <div className="flex-1 mx-6">
-          <form className="flex items-center">
-            <Input
-              className="flex-1"
-              placeholder="Search jobs..."
-              type="search"
-            />
-          </form>
+    <div className="flex flex-col gap-6 p-4 bg-white md:mx-32 lg:mx-64 md:p-6 dark:bg-green-800">
+      <header className="flex flex-col p-4 bg-white 2xl:flex-row md:items-center md:justify-between dark:bg-gray-800">
+        <div className="flex items-center justify-between mb-4 xl:mb-0">
+          <h1 className="flex items-center gap-2 mb-4 text-2xl font-bold text-center 2xl:mb-0 text-cyan-600 ">
+            HrFlow.ai
+          </h1>
         </div>
-        <div className="flex items-center space-x-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">Location</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[200px]">
-              <DropdownMenuRadioGroup value="all">
-                <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="san-francisco">
-                  San Francisco
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="new-york">
-                  New York
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="london">
-                  London
-                </DropdownMenuRadioItem>
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">Category</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[200px]">
-              <DropdownMenuRadioGroup value="all">
-                <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="engineering">
-                  Engineering
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="design">
-                  Design
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="product">
-                  Product
-                </DropdownMenuRadioItem>
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <div className="xl:flex xl:space-x-4">
+          <div className="relative w-full xl:w-80">
+            <form className="flex items-center ">
+              {searchTerm === "" && (
+                <FaSearch className="absolute right-2.5 top-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
+              )}
+              <Input
+                className="flex-1"
+                placeholder="Search jobs..."
+                type="search"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            </form>
+          </div>
+          <div className="flex items-center mt-4 space-x-4 xl:mt-0">
+            <Select value={sortCriteria} onValueChange={handleSortChange}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.values(Criterias).map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select
+              value={selectedCategory}
+              onValueChange={handleCategoryChange}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.values(Categories).map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button
+              onClick={clearAllFilters}
+              className="ml-4 "
+              variant="outline"
+            >
+              <AiOutlineClear />
+            </Button>
+          </div>
         </div>
       </header>
       <DndContext
