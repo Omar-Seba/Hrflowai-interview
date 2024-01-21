@@ -4,6 +4,8 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { MdDragIndicator } from "react-icons/md";
 import { FaClock } from "react-icons/fa6";
+import { GoHeart } from "react-icons/go";
+import { GoHeartFill } from "react-icons/go";
 
 import {
   Card,
@@ -36,6 +38,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const { attributes, listeners, transform, transition, setNodeRef } =
     useSortable({ id: job.id });
 
+  const [favorite, setFavorite] = React.useState<boolean>(false);
   const style = { transition, transform: CSS.Transform.toString(transform) };
 
   const formatDateToNow = (date: string) => {
@@ -113,9 +116,19 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                   );
                 })}
               </p>
+              <Button className="flex h-8 mt-4 text-black center-items bg-cyan-100">
+                Apply
+              </Button>
+              <div>
+                {favorite ? (
+                  <GoHeartFill />
+                ) : (
+                  <GoHeart className="hover:font-black" />
+                )}
+              </div>
             </CardContent>
           </AccordionContent>
-          <CardFooter className="flex flex-row justify-between py-3 bg-gray-100 rounded-b-2 h-14">
+          <CardFooter className="flex flex-row justify-between py-3 bg-gray-100 h-14">
             <AccordionTrigger>
               <Button className="h-8 bg-cyan-500">
                 {accordionState ? "View details" : "Hide"}

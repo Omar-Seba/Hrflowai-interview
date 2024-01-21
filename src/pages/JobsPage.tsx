@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import JobsList from "../components/Jobs";
+import JobsList from "../components/JobsList";
 import { JobListing, JobsResponse } from "../types/jobs";
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
 import { AiOutlineClear } from "react-icons/ai";
@@ -23,7 +23,6 @@ import {
 } from "../components/ui/select";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import { Link, BriefcaseIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -32,13 +31,16 @@ import {
   DropdownMenuRadioItem,
 } from "../components/ui/dropdown-menu";
 import { boardKeys, options } from "../lib/apiKeys";
+import MyPaginationComponent from "../components/MyPaginationComponent";
 
 const JobsPage: React.FC = () => {
   //TODO
   const [isLoading, setLoading] = useState(false);
   const [meta, setMeta] = useState();
+  const [jobsPerPage, setJobsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
   const [jobs, setJobs] = useState<JobListing[]>([]);
-  const [filtred, setFiltred] = useState<JobListing[]>([]);
+  const [filtered, setFiltered] = useState<JobListing[]>([]);
   const [selectedCategory, setSelectedCategory] = useLocalStorage(
     StoredKeys.SelectedCategory,
     ""
@@ -72,21 +74,26 @@ const JobsPage: React.FC = () => {
 
   const reitriveJobBoard = async () => {
     try {
+      setLoading(true);
       const boardKeysParam = encodeURIComponent(JSON.stringify(boardKeys));
 
-      const url = `https://api.hrflow.ai/v1/jobs/searching?board_keys=${boardKeysParam}`;
+      const url = `https://api.hrflow.ai/v1/jobs/searching?board_keys=${boardKeysParam}&limit=${jobsPerPage}&page=${currentPage}`;
 
       const response = await fetch(url, options);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const result: JobsResponse = await response.json();
-      console.log(result);
+      console.log(result.meta);
+      console.log(currentPage);
+
       setJobs(result.data.jobs);
-      setFiltred(result.data.jobs);
+      setMeta(result.meta);
+      setFiltered(result.data.jobs);
     } catch (err) {
       console.error("Error fetching jobs:", err);
     }
+    setLoading(false);
   };
 
   const onDragEnd = (event: DragEndEvent) => {
@@ -95,7 +102,7 @@ const JobsPage: React.FC = () => {
 
     setSelectedCategory("");
 
-    setFiltred((filtred) => {
+    setFiltered((filtred) => {
       const oldIndex = filtred.findIndex((job) => job.id === active.id);
       const newIndex = filtred.findIndex((job) => job.id === over.id);
       return arrayMove(filtred, oldIndex, newIndex);
@@ -138,14 +145,18 @@ const JobsPage: React.FC = () => {
         break;
     }
 
-    setFiltred(filtered);
+    setFiltered(filtered);
   }, [searchTerm, selectedCategory, sortCriteria, jobs]);
 
+  useEffect(() => {
+    reitriveJobBoard();
+  }, [jobsPerPage, currentPage]);
   // Usage in a React component
   useEffect(() => {
     reitriveJobBoard();
   }, []);
 
+  if (isLoading) return <div>Loading...</div>;
   return (
     <div className="flex flex-col gap-6 p-4 bg-white md:mx-32 lg:mx-64 md:p-6 dark:bg-green-800">
       <header className="flex flex-col p-4 bg-white 2xl:flex-row md:items-center md:justify-between dark:bg-gray-800">
@@ -212,10 +223,20 @@ const JobsPage: React.FC = () => {
         collisionDetection={closestCenter}
         onDragEnd={onDragEnd}
       >
-        <SortableContext items={filtred} strategy={verticalListSortingStrategy}>
-          <JobsList jobs={filtred} />
+        <SortableContext
+          items={filtered}
+          strategy={verticalListSortingStrategy}
+        >
+          <JobsList jobs={filtered} />
         </SortableContext>
       </DndContext>
+      <MyPaginationComponent
+        jobsPerPage={jobsPerPage}
+        setjobsPerPage={setJobsPerPage}
+        meta={meta}
+        setCurrentPage={setCurrentPage}
+        currentPage={currentPage}
+      />
     </div>
   );
 };
