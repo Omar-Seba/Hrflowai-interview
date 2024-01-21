@@ -15,6 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { Scroll } from "lucide-react";
+import ScrollToTopButton from "./ScrollToTopButton";
 
 interface MyPaginationProps {
   meta: Meta | undefined;
@@ -97,6 +99,7 @@ const MyPaginationComponent = ({
           )}
         </PaginationContent>
       </Pagination>
+      <ScrollToTopButton />
     </div>
   );
 };
