@@ -4,40 +4,27 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
-In the project directory, you can run:
+To test this react app I created for HrFlow.ai
 
-### `npm start`
+#### `npm install`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Installs all the necessary dependencies for the project. This command reads the `package.json` file and installs the libraries and packages required to run and develop the application. It is the first command that should be run after cloning the repository to set up the project environment.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the application for production. This command compiles the React application into static files, optimizes them for performance, and outputs them to the `build` directory. Use this command to create a production-ready version of your application.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### `npm install -g serve`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Installs the `serve` package globally on your system. `serve` is a static server that lets you serve static files easily. This command is typically used to install the `serve` tool, which can then be used to run the production build of your React application locally or for testing purposes.
 
-### `npm run eject`
+### `serve -s build`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Starts a static server to serve the contents of the `build` directory. This command launches a web server and makes your production build accessible through a URL, typically `http://localhost:5000`. Use this command to locally test the production build of your application.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### `npm test`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Launches the test runner
 
 ## Learn More
 
