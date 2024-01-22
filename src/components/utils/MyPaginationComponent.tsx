@@ -29,7 +29,6 @@ const MyPaginationComponent = ({
   meta,
   setCurrentPage,
   currentPage,
-  jobsPerPage,
   setjobsPerPage,
 }: MyPaginationProps) => {
   const [mymeta, setMeta] = useState<Meta>({
@@ -45,6 +44,7 @@ const MyPaginationComponent = ({
     for (let i = 1; i <= mymeta?.maxPage; i++) {
       pageNumbers.push(
         <PaginationItem
+          className="cursor-pointer"
           onClick={() => {
             setCurrentPage(i);
             window.scrollTo({
@@ -70,7 +70,14 @@ const MyPaginationComponent = ({
     <div className="flex flex-row">
       <Select
         value={mymeta.count.toString()}
-        onValueChange={(value) => setjobsPerPage(Number(value))}
+        onValueChange={(value) => {
+          setCurrentPage(1);
+          setjobsPerPage(Number(value));
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        }}
       >
         <SelectTrigger className="w-20">
           <SelectValue placeholder="10" />
@@ -84,16 +91,30 @@ const MyPaginationComponent = ({
       <Pagination>
         <PaginationContent>
           {mymeta.page > 1 && (
-            <PaginationItem>
+            <PaginationItem className="cursor-pointer">
               <PaginationPrevious
-                onClick={() => setCurrentPage(mymeta.page--)}
+                onClick={() => {
+                  setCurrentPage(mymeta.page--);
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }}
               />
             </PaginationItem>
           )}
           {renderPageNumbers()}
           {mymeta.page < mymeta.maxPage && (
-            <PaginationItem>
-              <PaginationNext onClick={() => setCurrentPage(mymeta.page++)} />
+            <PaginationItem className="cursor-pointer">
+              <PaginationNext
+                onClick={() => {
+                  setCurrentPage(mymeta.page++);
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }}
+              />
             </PaginationItem>
           )}
         </PaginationContent>

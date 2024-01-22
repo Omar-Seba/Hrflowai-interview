@@ -101,6 +101,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
             </div>
             <h1 className="text-xl italic text-gray-500">
               {findTagValue("company")} - {job.location.text}
+              {findTagValue("category") ? ` - ${findTagValue("category")}` : ""}
             </h1>
           </CardHeader>
           <AccordionContent>
@@ -121,16 +122,22 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                     .sort((a, b) => {
                       return b.name.length - a.name.length;
                     })
-                    .map((skill) => {
+                    .map((skill, key) => {
                       return (
-                        <Badge className="bg-cyan-500">{skill.name}</Badge>
+                        <Badge key={key} className="bg-cyan-500">
+                          {skill.name}
+                        </Badge>
                       );
                     })}
                 </div>
                 <div className="flex flex-wrap gap-2 mt-2">
                   <strong>Tags:</strong>
-                  {job.tags.map((tag) => {
-                    return <Badge variant={"secondary"}>{tag.value}</Badge>;
+                  {job.tags.map((tag, key) => {
+                    return (
+                      <Badge key={key} variant={"secondary"}>
+                        {tag.value}
+                      </Badge>
+                    );
                   })}
                 </div>
               </p>

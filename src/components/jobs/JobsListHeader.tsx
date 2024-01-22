@@ -56,7 +56,13 @@ const JobsListHeader: React.FC<JobsListHeaderProps> = ({
           </form>
         </div>
         <div className="flex items-center mt-4 space-x-4 xl:mt-0">
-          <Select value={sortCriteria} onValueChange={handleSortChange}>
+          <Select
+            value={sortCriteria}
+            onValueChange={(value) => {
+              console.log(value);
+              handleSortChange(value);
+            }}
+          >
             <SelectTrigger className="w-[100px] xl:w-[180px] hover:text-cyan-500">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
@@ -70,7 +76,7 @@ const JobsListHeader: React.FC<JobsListHeaderProps> = ({
           </Select>
           <Select value={selectedCategory} onValueChange={handleCategoryChange}>
             <SelectTrigger className="w-[180px] hover:text-cyan-500">
-              <SelectValue placeholder="Category" />
+              <SelectValue placeholder="Select a category" />
             </SelectTrigger>
             <SelectContent>
               {Object.values(Categories).map((category) => (

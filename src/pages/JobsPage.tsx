@@ -87,7 +87,7 @@ function JobsPage() {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
-    setSelectedCategory("");
+    // setSelectedCategory("");
 
     setFiltered((filtred) => {
       const oldIndex = filtred.findIndex((job) => job.id === active.id);
@@ -97,6 +97,7 @@ function JobsPage() {
   };
 
   useEffect(() => {
+    console.log("filtering..");
     if (!jobs) return;
     let filtered = [...jobs]; // Create a new array from jobs
 
@@ -104,6 +105,7 @@ function JobsPage() {
     filtered = filterBySelectedCategory(filtered, selectedCategory);
     filtered = sortJobs(filtered, sortCriteria);
 
+    console.log("after filtering..");
     setFiltered(filtered);
     setLoading(false);
   }, [searchTerm, selectedCategory, sortCriteria, jobs]);
