@@ -12,7 +12,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-
+import myImage from "../../assets/logo-with-title.png";
 interface JobsListHeaderProps {
   searchTerm: string;
   sortCriteria: string;
@@ -45,9 +45,7 @@ const JobsListHeader: React.FC<JobsListHeaderProps> = ({
   return (
     <header className="flex flex-col p-4 2xl:flex-row md:items-center md:justify-between dark:bg-gray-800">
       <div className="flex items-center justify-between mb-4 xl:mb-0">
-        <h1 className="flex items-center gap-2 mb-4 text-2xl font-bold text-center 2xl:mb-0 text-cyan-600 ">
-          HrFlow.ai
-        </h1>
+        <img alt="Logo" className="w-auto h-14" src={myImage} />
       </div>
       <div className="xl:flex xl:space-x-4">
         <div className="relative w-full xl:w-80">
@@ -64,60 +62,65 @@ const JobsListHeader: React.FC<JobsListHeaderProps> = ({
             />
           </form>
         </div>
-        <div className="flex items-center mt-4 space-x-4 xl:mt-0">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="hover:text-cyan-500">
-                Sort by
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              {Object.values(Criterias).map((criteria) => (
-                <DropdownMenuCheckboxItem
-                  key={criteria}
-                  checked={sortCriteria === criteria}
-                  onCheckedChange={() => handleSortChange(criteria)}
-                >
-                  {criteria}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="hover:text-cyan-500">
-                Select Categories
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              {Object.values(Categories).map((category) => (
-                <DropdownMenuCheckboxItem
-                  key={category}
-                  checked={selectedCategories.includes(category)}
-                  onCheckedChange={(checked) =>
-                    handleCategoryChangeLocally(category, checked)
-                  }
-                >
-                  {category}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <Button
-                  className="flex flex-row hover:text-cyan-600"
-                  variant={"outline"}
-                  onClick={clearAllFilters}
-                >
-                  clear all filters
-                  <TbFilterOff size={23} className="ml-2" />
+        <div className="grid grid-cols-1 gap-1 mt-4 md:grid-cols-3 md:gap-6 xl:mt-0 xl:grid-cols-[auto_auto_auto] xl:gap-4 xl:justify-end">
+          <div className="mb-4 md:mb-0 xl:mb-0 ">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="hover:text-cyan-500">
+                  Sort by
                 </Button>
-              </TooltipTrigger>
-            </Tooltip>
-          </TooltipProvider>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                {Object.values(Criterias).map((criteria) => (
+                  <DropdownMenuCheckboxItem
+                    key={criteria}
+                    checked={sortCriteria === criteria}
+                    onCheckedChange={() => handleSortChange(criteria)}
+                  >
+                    {criteria}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <div className="mb-4 md:mb-0 xl:mb-0">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="hover:text-cyan-500">
+                  Select Categories
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                {Object.values(Categories).map((category) => (
+                  <DropdownMenuCheckboxItem
+                    key={category}
+                    checked={selectedCategories.includes(category)}
+                    onCheckedChange={(checked) =>
+                      handleCategoryChangeLocally(category, checked)
+                    }
+                  >
+                    {category}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <div className="mb-4 md:mb-0 xl:mb-0">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    className="flex flex-row hover:text-cyan-600"
+                    variant={"outline"}
+                    onClick={clearAllFilters}
+                  >
+                    clear all filters
+                    <TbFilterOff size={23} className="ml-2" />
+                  </Button>
+                </TooltipTrigger>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
       </div>
     </header>

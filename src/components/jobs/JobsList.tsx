@@ -1,6 +1,5 @@
 import React from "react";
-// import JobCard from './JobCard';
-import { JobListing } from "../../types/jobs"; // Import the interfaces
+import { JobListing } from "../../types/jobs";
 import JobCard from "./JobCard";
 
 interface JobsListProps {

@@ -6,8 +6,6 @@ export enum StoredKeys {
   SelectedCategory = "selectedCategory",
 }
 
-// Categories.ts
-
 export enum Categories {
   AIResearchDevelopment = "AI / Research & Development",
   ArtificialIntelligence = "Artificial Intelligence",

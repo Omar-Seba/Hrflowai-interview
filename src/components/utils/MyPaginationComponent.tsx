@@ -6,7 +6,7 @@ import {
   PaginationPrevious,
   PaginationNext,
   PaginationLink,
-} from "../ui/pagination"; // Adjust the import path as needed
+} from "../ui/pagination";
 import { Meta } from "@/types/meta";
 import {
   Select,

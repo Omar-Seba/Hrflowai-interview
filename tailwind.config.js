@@ -17,8 +17,9 @@ module.exports = {
       },
     },
     extend: {
-      // fontFamily: {
-      //   'sans': ['"Proxima Nova"', "sans-serif"],
+      fontFamily: {
+        sans: ['"Poppins"'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

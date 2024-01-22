@@ -9,7 +9,6 @@ interface SkeletonForLoadingProps {
 const SkeletonForLoading: React.FC<SkeletonForLoadingProps> = ({
   numberOfJobs,
 }) => {
-  // Render skeleton loading components based on the number of jobs
   const skeletonItems = Array.from({ length: numberOfJobs }, (_, index) => (
     <div key={index} className="skeleton-item">
       <Card className="w-full border-b-2">

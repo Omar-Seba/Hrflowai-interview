@@ -78,7 +78,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
             <div className="flex flex-row justify-between">
               <CardTitle className="flex">
                 {" "}
-                {job.name}
+                <p className="text-2xl md:text-2xl">{job.name}</p>
                 <div
                   onMouseDown={() => {
                     setFavorite(!favorite);
@@ -99,22 +99,21 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                 size={26}
               ></MdDragIndicator>
             </div>
-            <h1 className="text-xl italic text-gray-500">
+            <h1 className="italic text-gray-500  text-md md:text-xl">
               {findTagValue("company")} - {job.location.text}
               {findTagValue("category") ? ` - ${findTagValue("category")}` : ""}
             </h1>
           </CardHeader>
           <AccordionContent>
-            <CardContent className="text-lg">
+            <CardContent className="md:text-lg">
               {job.summary && (
-                <p className="mb-2 text-justify">
-                  <strong>Summary:</strong> {job.summary}
+                <p className="mb-2 ">
+                  <strong>Summary:</strong> <br />
+                  <p className="text-justify whitespace-pre-line">
+                    {job.summary}
+                  </p>
                 </p>
               )}
-              {/* <p>
-                <strong>Skills:</strong>{" "}
-                {job.skills.map((skill) => skill.name).join(", ")}
-              </p> */}
               <p>
                 <div className="flex flex-wrap gap-2 mt-2">
                   <strong>Skills:</strong>
@@ -157,10 +156,10 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <h1 className="flex flex-row hover:text-cyan-500">
+                  <h1 className="flex flex-row text-sm md:text-lg hover:text-cyan-500">
                     <FaClock
                       size={16}
-                      className="inline-block mt-1 mr-2 align-bottom"
+                      className="inline-block mr-2 mt-0.5 align-bottom md:mt-1"
                     />
                     {formatDateToNow(job.created_at)}
                   </h1>
