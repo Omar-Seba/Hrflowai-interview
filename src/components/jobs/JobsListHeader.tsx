@@ -63,9 +63,9 @@ const JobsListHeader: React.FC<JobsListHeaderProps> = ({
           </form>
         </div>
         <div className="grid grid-cols-1 gap-1 mt-4 md:grid-cols-3 md:gap-6 xl:mt-0 xl:grid-cols-[auto_auto_auto] xl:gap-4 xl:justify-end">
-          <div className="mb-4 md:mb-0 xl:mb-0 ">
+          <div className="w-full mb-4 md:mb-0 xl:mb-0 ">
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger asChild className="w-40 md:w-auto">
                 <Button variant="outline" className="hover:text-cyan-500">
                   Sort by
                 </Button>
