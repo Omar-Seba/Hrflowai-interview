@@ -94,7 +94,7 @@ const MyPaginationComponent = ({
           {renderPageNumbers()}
           {mymeta.page < mymeta.maxPage && (
             <PaginationItem>
-              <PaginationNext href={`#page${mymeta.page + 1}`} />
+              <PaginationNext onClick={() => setCurrentPage(mymeta.page++)} />
             </PaginationItem>
           )}
         </PaginationContent>

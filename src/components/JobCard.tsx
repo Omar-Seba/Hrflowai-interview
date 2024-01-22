@@ -29,6 +29,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../components/ui/tooltip";
+import { Badge } from "./ui/badge";
 
 interface JobCardProps {
   job: JobListing;
@@ -80,74 +81,89 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
         <AccordionItem value="item-1">
           <CardHeader className="h-30">
             <div className="flex flex-row justify-between">
-              <CardTitle> {job.name}</CardTitle>
+              <CardTitle className="flex">
+                {" "}
+                {job.name}
+                <div
+                  onMouseDown={() => {
+                    setFavorite(!favorite);
+                  }}
+                  className="mt-1 ml-3 "
+                >
+                  {favorite ? (
+                    <GoHeartFill size={20} color="#FF5252" />
+                  ) : (
+                    <GoHeart size={20} className="hover:text-[#FF5252]" />
+                  )}
+                </div>
+              </CardTitle>
               <MdDragIndicator
-                className=""
                 {...attributes}
                 {...listeners}
                 size={26}
               ></MdDragIndicator>
             </div>
-            <h1 className="text-xl italic font-medium">
-              {findTagValue("company")}
+            <h1 className="text-xl italic text-gray-500">
+              {findTagValue("company")} - {job.location.text}
             </h1>
           </CardHeader>
           <AccordionContent>
-            <CardContent>
-              <p>
-                <strong>Location:</strong> {job.location.text}
-              </p>
-              <p></p>
-
-              <p className="text-justify">
-                <strong>Summary:</strong> {job.summary}
-              </p>
-              <p>
+            <CardContent className="text-lg">
+              {job.summary && (
+                <p className="mb-2 text-justify">
+                  <strong>Summary:</strong> {job.summary}
+                </p>
+              )}
+              {/* <p>
                 <strong>Skills:</strong>{" "}
                 {job.skills.map((skill) => skill.name).join(", ")}
-              </p>
+              </p> */}
               <p>
-                <strong>Tags:</strong>
-                {job.tags.map((tag) => {
-                  return (
-                    <div>
-                      <strong>{tag.name}</strong>: {tag.value}
-                    </div>
-                  );
-                })}
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <strong>Skills:</strong>
+                  {job.skills
+                    .sort((a, b) => {
+                      return b.name.length - a.name.length;
+                    })
+                    .map((skill) => {
+                      return (
+                        <Badge className="bg-cyan-500">{skill.name}</Badge>
+                      );
+                    })}
+                </div>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <strong>Tags:</strong>
+                  {job.tags.map((tag) => {
+                    return <Badge variant={"secondary"}>{tag.value}</Badge>;
+                  })}
+                </div>
               </p>
-              <Button className="flex h-8 mt-4 text-black center-items bg-cyan-100">
-                Apply
-              </Button>
-              <div>
-                {favorite ? (
-                  <GoHeartFill />
-                ) : (
-                  <GoHeart className="hover:font-black" />
-                )}
-              </div>
             </CardContent>
           </AccordionContent>
-          <CardFooter className="flex flex-row justify-between py-3 bg-gray-100 h-14">
-            <AccordionTrigger>
-              <Button className="h-8 bg-cyan-500">
-                {accordionState ? "View details" : "Hide"}
+          <CardFooter className="flex justify-between py-3 bg-slate-100 h-14">
+            <div className="flex gap-2">
+              <AccordionTrigger>
+                <Button className="h-9 bg-cyan-500">
+                  {accordionState ? "View details" : "Hide details"}
+                </Button>
+              </AccordionTrigger>
+              <Button className="mt-4 h-9 hover:text-white bg-cyan-500">
+                Apply
               </Button>
-            </AccordionTrigger>
-
+            </div>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
                   <h1 className="flex flex-row">
                     <FaClock
-                      size={18}
-                      className="inline-block mr-2 align-bottom"
+                      size={16}
+                      className="inline-block mt-1 mr-2 align-bottom"
                     />
                     {formatDateToNow(job.created_at)}
                   </h1>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <h1 className="h-8">{formatDate(job.created_at)}</h1>
+                  <h1>{formatDate(job.created_at)}</h1>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>

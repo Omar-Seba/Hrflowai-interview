@@ -3,38 +3,21 @@ import React, { useEffect, useState } from "react";
 import JobsList from "../components/JobsList";
 import { JobListing, JobsResponse } from "../types/jobs";
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
-import { AiOutlineClear } from "react-icons/ai";
-import { FaSearch } from "react-icons/fa";
-
 import {
   SortableContext,
   verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
-import { Categories, Criterias, useLocalStorage } from "../utils/LocalStorage";
+import { useLocalStorage } from "../utils/LocalStorage";
 import { StoredKeys } from "../utils/LocalStorage";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../components/ui/select";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-} from "../components/ui/dropdown-menu";
 import { boardKeys, options } from "../lib/apiKeys";
 import MyPaginationComponent from "../components/MyPaginationComponent";
+import Header from "../components/Header";
+import SkeletonForLoading from "./../components/SkeletonForLoading";
+import NoResultComponent from "./../components/NoResultComponent";
 
-const JobsPage: React.FC = () => {
-  //TODO
+function JobsPage() {
   const [isLoading, setLoading] = useState(false);
   const [meta, setMeta] = useState();
   const [jobsPerPage, setJobsPerPage] = useState(10);
@@ -146,6 +129,7 @@ const JobsPage: React.FC = () => {
     }
 
     setFiltered(filtered);
+    setLoading(false);
   }, [searchTerm, selectedCategory, sortCriteria, jobs]);
 
   useEffect(() => {
@@ -156,89 +140,46 @@ const JobsPage: React.FC = () => {
     reitriveJobBoard();
   }, []);
 
-  if (isLoading) return <div>Loading...</div>;
   return (
-    <div className="flex flex-col gap-6 p-4 bg-white md:mx-32 lg:mx-64 md:p-6 dark:bg-green-800">
-      <header className="flex flex-col p-4 bg-white 2xl:flex-row md:items-center md:justify-between dark:bg-gray-800">
-        <div className="flex items-center justify-between mb-4 xl:mb-0">
-          <h1 className="flex items-center gap-2 mb-4 text-2xl font-bold text-center 2xl:mb-0 text-cyan-600 ">
-            HrFlow.ai
-          </h1>
-        </div>
-        <div className="xl:flex xl:space-x-4">
-          <div className="relative w-full xl:w-80">
-            <form className="flex items-center ">
-              {searchTerm === "" && (
-                <FaSearch className="absolute right-2.5 top-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
-              )}
-              <Input
-                className="flex-1"
-                placeholder="Search jobs..."
-                type="search"
-                value={searchTerm}
-                onChange={handleSearchChange}
-              />
-            </form>
-          </div>
-          <div className="flex items-center mt-4 space-x-4 xl:mt-0">
-            <Select value={sortCriteria} onValueChange={handleSortChange}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.values(Criterias).map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select
-              value={selectedCategory}
-              onValueChange={handleCategoryChange}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.values(Categories).map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button
-              onClick={clearAllFilters}
-              className="ml-4 "
-              variant="outline"
-            >
-              <AiOutlineClear />
-            </Button>
-          </div>
-        </div>
-      </header>
-      <DndContext
-        modifiers={[restrictToVerticalAxis]}
-        collisionDetection={closestCenter}
-        onDragEnd={onDragEnd}
-      >
-        <SortableContext
-          items={filtered}
-          strategy={verticalListSortingStrategy}
-        >
-          <JobsList jobs={filtered} />
-        </SortableContext>
-      </DndContext>
-      <MyPaginationComponent
-        jobsPerPage={jobsPerPage}
-        setjobsPerPage={setJobsPerPage}
-        meta={meta}
-        setCurrentPage={setCurrentPage}
-        currentPage={currentPage}
+    <div className="flex flex-col gap-6 p-4 md:mx-32 lg:mx-64 md:p-6 dark:bg-green-800">
+      <Header
+        searchTerm={searchTerm}
+        sortCriteria={sortCriteria}
+        selectedCategory={selectedCategory}
+        handleSearchChange={handleSearchChange}
+        handleSortChange={handleSortChange}
+        handleCategoryChange={handleCategoryChange}
+        clearAllFilters={clearAllFilters}
       />
+      {isLoading ? (
+        <SkeletonForLoading numberOfJobs={jobsPerPage} />
+      ) : filtered.length === 0 && !isLoading ? (
+        <NoResultComponent />
+      ) : (
+        <>
+          <DndContext
+            modifiers={[restrictToVerticalAxis]}
+            collisionDetection={closestCenter}
+            onDragEnd={onDragEnd}
+          >
+            <SortableContext
+              items={filtered}
+              strategy={verticalListSortingStrategy}
+            >
+              <JobsList jobs={filtered} />
+            </SortableContext>
+          </DndContext>
+          <MyPaginationComponent
+            jobsPerPage={jobsPerPage}
+            setjobsPerPage={setJobsPerPage}
+            meta={meta}
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+          />
+        </>
+      )}
     </div>
   );
-};
+}
 
 export default JobsPage;
