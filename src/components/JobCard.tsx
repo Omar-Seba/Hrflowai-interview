@@ -73,11 +73,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
       type="single"
       collapsible
     >
-      <Card
-        ref={setNodeRef}
-        style={style}
-        className="w-full border-b-2 border-cyan-400"
-      >
+      <Card ref={setNodeRef} style={style} className="w-full border-cyan-400">
         <AccordionItem value="item-1">
           <CardHeader className="h-30">
             <div className="flex flex-row justify-between">
@@ -98,6 +94,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                 </div>
               </CardTitle>
               <MdDragIndicator
+                className="hover:text-cyan-500"
                 {...attributes}
                 {...listeners}
                 size={26}
@@ -140,7 +137,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               </p>
             </CardContent>
           </AccordionContent>
-          <CardFooter className="flex justify-between py-3 bg-slate-100 h-14">
+          <CardFooter className="flex justify-between py-3 rounded-b-xl bg-slate-100 h-14">
             <div className="flex gap-2">
               <AccordionTrigger>
                 <Button className="h-9 bg-cyan-500">
@@ -154,7 +151,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <h1 className="flex flex-row">
+                  <h1 className="flex flex-row hover:text-cyan-500">
                     <FaClock
                       size={16}
                       className="inline-block mt-1 mr-2 align-bottom"
