@@ -8,7 +8,7 @@ import {
   verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
-import { useLocalStorage } from "../utils/LocalStorage";
+import { useLocalStorage, useLocalStorageT } from "../utils/LocalStorage";
 import { StoredKeys } from "../utils/LocalStorage";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { boardKeys, options } from "../lib/apiOptions";
@@ -18,7 +18,7 @@ import SkeletonForLoading from "../components/utils/SkeletonForLoading";
 import NoResultComponent from "../components/utils/NoResultComponent";
 import {
   filterBySearchTerm,
-  filterBySelectedCategory,
+  filterBySelectedCategories,
   sortJobs,
 } from "../components/utils/filtering/filter";
 import { buildApiUrl, handleApiResponse, toastError } from "../lib/apiCall";
@@ -30,10 +30,9 @@ function JobsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [jobs, setJobs] = useState<JobListing[]>([]);
   const [filtered, setFiltered] = useState<JobListing[]>([]);
-  const [selectedCategory, setSelectedCategory] = useLocalStorage(
-    StoredKeys.SelectedCategory,
-    ""
-  );
+  const [selectedCategories, setSelectedCategories] = useLocalStorageT<
+    string[]
+  >(StoredKeys.SelectedCategory, []);
   const [sortCriteria, setSortCriteria] = useLocalStorage(
     StoredKeys.SortCriteria,
     ""
@@ -50,13 +49,12 @@ function JobsPage() {
     setSortCriteria(value);
   };
 
-  const handleCategoryChange = (value: string) => {
-    if (value === selectedCategory) return setSelectedCategory(""); // Toggle category
-    setSelectedCategory(value);
+  const handleCategoryChange = (values: string[]) => {
+    setSelectedCategories(values);
   };
 
   const clearAllFilters = () => {
-    setSelectedCategory("");
+    setSelectedCategories([]);
     setSortCriteria("");
     setSearchTerm("");
   };
@@ -100,12 +98,12 @@ function JobsPage() {
     let filtered = [...jobs]; // Create a new array from jobs
 
     filtered = filterBySearchTerm(filtered, searchTerm);
-    filtered = filterBySelectedCategory(filtered, selectedCategory);
+    filtered = filterBySelectedCategories(filtered, selectedCategories);
     filtered = sortJobs(filtered, sortCriteria);
 
     setFiltered(filtered);
     setLoading(false);
-  }, [searchTerm, selectedCategory, sortCriteria, jobs]);
+  }, [searchTerm, selectedCategories, sortCriteria, jobs]);
 
   useEffect(() => {
     reitriveJobBoard();
@@ -116,7 +114,7 @@ function JobsPage() {
       <JobsListHeader
         searchTerm={searchTerm}
         sortCriteria={sortCriteria}
-        selectedCategory={selectedCategory}
+        selectedCategories={selectedCategories}
         handleSearchChange={handleSearchChange}
         handleSortChange={handleSortChange}
         handleCategoryChange={handleCategoryChange}
@@ -128,7 +126,7 @@ function JobsPage() {
         <NoResultComponent
           title={"Oops... No results found"}
           description="No jobs found with the given search criteria. Please try again with
-        different keywords."
+        different keywords or criterias."
         />
       ) : (
         <>

@@ -11,16 +11,22 @@ export const filterBySearchTerm = (
   );
 };
 
-export const filterBySelectedCategory = (
+export const filterBySelectedCategories = (
   jobs: JobListing[],
-  selectedCategory: string
+  selectedCategories: string[]
 ): JobListing[] => {
-  if (!selectedCategory) return jobs;
+  if (selectedCategories.length === 0) return jobs; // Return all jobs if no categories are selected
+  const lowerCaseSelectedCategories = selectedCategories.map((category) =>
+    category.toLowerCase()
+  );
   return jobs.filter((job) =>
-    job.tags.some((tag) => tag.value === selectedCategory)
+    job.tags.some((tag) =>
+      tag.value
+        ? lowerCaseSelectedCategories.includes(tag.value.toLocaleLowerCase())
+        : false
+    )
   );
 };
-
 export const sortJobs = (
   jobs: JobListing[],
   sortCriteria: string
@@ -39,10 +45,10 @@ export const sortJobs = (
     case Criterias.Category:
       return sortedJobs.sort((a, b) => {
         const aCompanyTag = a.tags.find(
-          (tag) => tag.name.toLowerCase() === "company"
+          (tag) => tag.name.toLowerCase() === "category"
         );
         const bCompanyTag = b.tags.find(
-          (tag) => tag.name.toLowerCase() === "company"
+          (tag) => tag.name.toLowerCase() === "category"
         );
         const aValue = aCompanyTag ? aCompanyTag.value ?? "" : "";
         const bValue = bCompanyTag ? bCompanyTag.value ?? "" : "";

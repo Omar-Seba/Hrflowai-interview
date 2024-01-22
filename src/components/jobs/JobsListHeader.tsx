@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Input } from "../ui/input";
 import {
@@ -13,26 +13,45 @@ import { TbFilterOff } from "react-icons/tb";
 
 import { Criterias, Categories } from "../../utils/LocalStorage";
 import { Tooltip, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 
 interface JobsListHeaderProps {
   searchTerm: string;
   sortCriteria: string;
-  selectedCategory: string;
+  selectedCategories: string[];
   handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleSortChange: (value: string) => void;
-  handleCategoryChange: (value: string) => void;
+  handleCategoryChange: (value: string[]) => void;
   clearAllFilters: () => void;
 }
 
 const JobsListHeader: React.FC<JobsListHeaderProps> = ({
   searchTerm,
   sortCriteria,
-  selectedCategory,
+  selectedCategories,
   handleSearchChange,
   handleSortChange,
   handleCategoryChange,
   clearAllFilters,
 }) => {
+  const handleCategoryChangeLocally = (category: string, checked: boolean) => {
+    if (checked) {
+      handleCategoryChange([...selectedCategories, category]);
+    } else {
+      handleCategoryChange(
+        selectedCategories.filter((c: string) => c !== category)
+      );
+    }
+  };
+
   return (
     <header className="flex flex-col p-4 2xl:flex-row md:items-center md:justify-between dark:bg-gray-800">
       <div className="flex items-center justify-between mb-4 xl:mb-0">
@@ -73,7 +92,7 @@ const JobsListHeader: React.FC<JobsListHeaderProps> = ({
               ))}
             </SelectContent>
           </Select>
-          <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+          {/* <Select value={selectedCategory} onValueChange={handleCategoryChange}>
             <SelectTrigger className="w-[180px] hover:text-cyan-500">
               <SelectValue placeholder="Select a category" />
             </SelectTrigger>
@@ -84,7 +103,25 @@ const JobsListHeader: React.FC<JobsListHeaderProps> = ({
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </Select> */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">Select Categories</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              {Object.values(Categories).map((category) => (
+                <DropdownMenuCheckboxItem
+                  key={category}
+                  checked={selectedCategories.includes(category)}
+                  onCheckedChange={(checked) =>
+                    handleCategoryChangeLocally(category, checked)
+                  }
+                >
+                  {category}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
