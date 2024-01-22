@@ -16,6 +16,9 @@ import MyPaginationComponent from "../components/MyPaginationComponent";
 import Header from "../components/Header";
 import SkeletonForLoading from "./../components/SkeletonForLoading";
 import NoResultComponent from "./../components/NoResultComponent";
+import { toast } from "../components/ui/use-toast";
+import ToastError from "../components/TostError";
+import { handleError } from "../lib/handlingErrors";
 
 function JobsPage() {
   const [isLoading, setLoading] = useState(false);
@@ -56,6 +59,7 @@ function JobsPage() {
   };
 
   const reitriveJobBoard = async () => {
+    let isResponseError = false;
     try {
       setLoading(true);
       const boardKeysParam = encodeURIComponent(JSON.stringify(boardKeys));
@@ -64,6 +68,18 @@ function JobsPage() {
 
       const response = await fetch(url, options);
       if (!response.ok) {
+        isResponseError = true;
+        console.log(response);
+        toast({
+          variant: "error",
+          duration: 5000,
+          action: (
+            <ToastError
+              title={"Error code: " + response.status}
+              message={handleError(response.status)}
+            />
+          ),
+        });
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const result: JobsResponse = await response.json();
@@ -74,7 +90,13 @@ function JobsPage() {
       setMeta(result.meta);
       setFiltered(result.data.jobs);
     } catch (err) {
-      console.error("Error fetching jobs:", err);
+      if (!isResponseError)
+        toast({
+          variant: "error",
+          duration: 5000,
+          action: <ToastError title={"Bad request"} />,
+        });
+      console.error(`HTTP error! Status: ${err}`);
     }
     setLoading(false);
   };
@@ -119,7 +141,6 @@ function JobsPage() {
         );
         break;
       case "category":
-        // Assuming there is a primary category in tags
         filtered = filtered.sort((a, b) =>
           (a.tags[0]?.value || "").localeCompare(b.tags[0]?.value || "")
         );
@@ -135,7 +156,7 @@ function JobsPage() {
   useEffect(() => {
     reitriveJobBoard();
   }, [jobsPerPage, currentPage]);
-  // Usage in a React component
+
   useEffect(() => {
     reitriveJobBoard();
   }, []);

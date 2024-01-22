@@ -19,14 +19,6 @@ const NoResultComponent: React.FC = () => {
         No jobs found with the given search criteria. Please try again with
         different keywords.
       </p>
-      <Button
-        onClick={() => {
-          window.location.href = "/";
-        }}
-        className="mt-3 bg-cyan-500"
-      >
-        Return to Homepage
-      </Button>
     </div>
   );
 };

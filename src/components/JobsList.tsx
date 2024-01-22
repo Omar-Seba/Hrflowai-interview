@@ -5,7 +5,6 @@ import JobCard from "./JobCard";
 
 interface JobsListProps {
   jobs: JobListing[] | undefined;
-  // onDragEnd: (result: any) => void;
 }
 
 const JobsList: React.FC<JobsListProps> = ({ jobs }) => {

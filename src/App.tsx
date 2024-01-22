@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./style/App.css";
 import JobsPage from "./pages/JobsPage";
@@ -10,7 +9,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<JobsPage />} />
-          <Route path="*" element={<NotFoundPage />} />{" "}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./tests/reportWebVitals";
+import { Toaster } from "./components/ui/toaster";
+import { ToastProvider } from "./components/ui/toast";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -9,6 +11,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <App />
+    <Toaster />
   </React.StrictMode>
 );
 
