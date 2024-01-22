@@ -20,6 +20,11 @@ import { toast } from "../components/ui/use-toast";
 import ToastError from "../components/utils/toastVariant/TostError";
 import { handleError } from "../lib/handlingErrors";
 import ToastSuccess from "../components/utils/toastVariant/TostSuccess";
+import {
+  filterBySearchTerm,
+  filterBySelectedCategory,
+  sortJobs,
+} from "../components/utils/filtering/filter";
 
 function JobsPage() {
   const [isLoading, setLoading] = useState(false);
@@ -127,36 +132,9 @@ function JobsPage() {
     if (!jobs) return;
     let filtered = [...jobs]; // Create a new array from jobs
 
-    if (searchTerm) {
-      filtered = filtered.filter((job) =>
-        job.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    if (selectedCategory) {
-      filtered = filtered.filter((job) =>
-        job.tags.some((tag) => tag.value === selectedCategory)
-      );
-    }
-
-    switch (sortCriteria) {
-      case "name":
-        filtered = filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case "creationDate":
-        filtered = filtered.sort(
-          (a, b) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        );
-        break;
-      case "category":
-        filtered = filtered.sort((a, b) =>
-          (a.tags[0]?.value || "").localeCompare(b.tags[0]?.value || "")
-        );
-        break;
-      default:
-        break;
-    }
+    filtered = filterBySearchTerm(filtered, searchTerm);
+    filtered = filterBySelectedCategory(filtered, selectedCategory);
+    filtered = sortJobs(filtered, sortCriteria);
 
     setFiltered(filtered);
     setLoading(false);
