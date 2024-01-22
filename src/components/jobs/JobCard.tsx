@@ -146,7 +146,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
           <CardFooter className="flex justify-between py-3 rounded-b-xl bg-slate-100 h-14">
             <div className="flex gap-2">
               <AccordionTrigger>
-                <Button className="h-9 bg-cyan-500">
+                <Button className="h-9 bg-cyan-500 hover:no-underline">
                   {accordionState ? "View details" : "Hide details"}
                 </Button>
               </AccordionTrigger>

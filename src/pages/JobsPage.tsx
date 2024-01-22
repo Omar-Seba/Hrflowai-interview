@@ -46,7 +46,8 @@ function JobsPage() {
     setSearchTerm(event.target.value);
   };
   const handleSortChange = (value: string) => {
-    setSortCriteria(value);
+    if (value === sortCriteria) setSortCriteria("");
+    else setSortCriteria(value);
   };
 
   const handleCategoryChange = (values: string[]) => {
@@ -84,7 +85,7 @@ function JobsPage() {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
-    // setSelectedCategory("");
+    setSortCriteria(""); // Reset sort criteria when drag and drop
 
     setFiltered((filtred) => {
       const oldIndex = filtred.findIndex((job) => job.id === active.id);

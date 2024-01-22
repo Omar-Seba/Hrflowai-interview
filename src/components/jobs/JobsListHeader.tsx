@@ -1,13 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { FaSearch } from "react-icons/fa";
 import { Input } from "../ui/input";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "../ui/select";
 import { Button } from "../ui/button";
 import { TbFilterOff } from "react-icons/tb";
 
@@ -17,11 +10,8 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 
 interface JobsListHeaderProps {
   searchTerm: string;
@@ -75,38 +65,30 @@ const JobsListHeader: React.FC<JobsListHeaderProps> = ({
           </form>
         </div>
         <div className="flex items-center mt-4 space-x-4 xl:mt-0">
-          <Select
-            value={sortCriteria}
-            onValueChange={(value) => {
-              handleSortChange(value);
-            }}
-          >
-            <SelectTrigger className="w-[100px] xl:w-[180px] hover:text-cyan-500">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.values(Criterias).map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {/* <Select value={selectedCategory} onValueChange={handleCategoryChange}>
-            <SelectTrigger className="w-[180px] hover:text-cyan-500">
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.values(Categories).map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select> */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">Select Categories</Button>
+              <Button variant="outline" className="hover:text-cyan-500">
+                Sort by
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              {Object.values(Criterias).map((criteria) => (
+                <DropdownMenuCheckboxItem
+                  key={criteria}
+                  checked={sortCriteria === criteria}
+                  onCheckedChange={() => handleSortChange(criteria)}
+                >
+                  {criteria}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="hover:text-cyan-500">
+                Select Categories
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               {Object.values(Categories).map((category) => (
