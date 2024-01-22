@@ -1,20 +1,20 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "./ui/select";
-import { Button } from "./ui/button";
+} from "../ui/select";
+import { Button } from "../ui/button";
 import { TbFilterOff } from "react-icons/tb";
 
-import { Criterias, Categories } from "../utils/LocalStorage";
-import { Tooltip, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import { Criterias, Categories } from "../../utils/LocalStorage";
+import { Tooltip, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
-interface HeaderProps {
+interface JobsListHeaderProps {
   searchTerm: string;
   sortCriteria: string;
   selectedCategory: string;
@@ -24,7 +24,7 @@ interface HeaderProps {
   clearAllFilters: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({
+const JobsListHeader: React.FC<JobsListHeaderProps> = ({
   searchTerm,
   sortCriteria,
   selectedCategory,
@@ -100,4 +100,4 @@ const Header: React.FC<HeaderProps> = ({
   );
 };
 
-export default Header;
+export default JobsListHeader;

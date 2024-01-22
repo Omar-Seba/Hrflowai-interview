@@ -1,8 +1,16 @@
 import React from "react";
-import noResult from "../assets/empty-inbox-outline.svg";
-import { Button } from "./ui/button";
+import noResult from "../../assets/empty-inbox-outline.svg";
+import { Button } from "../ui/button";
 
-const NoResultComponent: React.FC = () => {
+interface NoResultComponentProps {
+  title: string;
+  description?: string;
+}
+
+const NoResultComponent: React.FC<NoResultComponentProps> = ({
+  title,
+  description,
+}) => {
   return (
     <div className="flex flex-col items-center justify-center md:mt-20">
       <img
@@ -13,11 +21,10 @@ const NoResultComponent: React.FC = () => {
         width="550"
       />
       <h1 className="text-2xl font-semibold tracking-tighter sm:text-5xl md:text-4xl lg:text-4xl">
-        Oops... No results found
+        {title}
       </h1>
       <p className="max-w-md mx-10 mt-3 text-center text-gray-500 md:mx-9 md:text-xl dark:text-gray-400">
-        No jobs found with the given search criteria. Please try again with
-        different keywords.
+        {description}
       </p>
     </div>
   );

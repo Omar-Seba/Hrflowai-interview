@@ -6,7 +6,7 @@ import {
   PaginationPrevious,
   PaginationNext,
   PaginationLink,
-} from "./ui/pagination"; // Adjust the import path as needed
+} from "../ui/pagination"; // Adjust the import path as needed
 import { Meta } from "@/types/meta";
 import {
   Select,
@@ -14,7 +14,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "../ui/select";
 import { Scroll } from "lucide-react";
 import ScrollToTopButton from "./ScrollToTopButton";
 

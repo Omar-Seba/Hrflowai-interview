@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { JobListing, Tags } from "../types/jobs"; // Import the interfaces from where they are defined
+import { JobListing, Tags } from "../../types/jobs"; // Import the interfaces from where they are defined
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { MdDragIndicator } from "react-icons/md";
@@ -14,22 +14,22 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/card";
+} from "../ui/card";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "./../components/ui/accordion";
-import { Button } from "./ui/button";
+} from "../ui/accordion";
+import { Button } from "../ui/button";
 import moment from "moment";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../components/ui/tooltip";
-import { Badge } from "./ui/badge";
+} from "../ui/tooltip";
+import { Badge } from "../ui/badge";
 
 interface JobCardProps {
   job: JobListing;

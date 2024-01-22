@@ -1,6 +1,6 @@
 import React from "react";
-import { Card, CardHeader, CardFooter } from "./ui/card";
-import { Skeleton } from "./ui/skeleton";
+import { Card, CardHeader, CardFooter } from "../ui/card";
+import { Skeleton } from "../ui/skeleton";
 
 interface SkeletonForLoadingProps {
   numberOfJobs: number;

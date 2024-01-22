@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import JobsList from "../components/JobsList";
+import JobsList from "../components/jobs/JobsList";
 import { JobListing, JobsResponse } from "../types/jobs";
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
 import {
@@ -12,14 +12,14 @@ import { useLocalStorage } from "../utils/LocalStorage";
 import { StoredKeys } from "../utils/LocalStorage";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { boardKeys, options } from "../lib/apiKeys";
-import MyPaginationComponent from "../components/MyPaginationComponent";
-import Header from "../components/Header";
-import SkeletonForLoading from "./../components/SkeletonForLoading";
-import NoResultComponent from "./../components/NoResultComponent";
+import MyPaginationComponent from "../components/utils/MyPaginationComponent";
+import JobsListHeader from "../components/jobs/JobsListHeader";
+import SkeletonForLoading from "../components/utils/SkeletonForLoading";
+import NoResultComponent from "../components/utils/NoResultComponent";
 import { toast } from "../components/ui/use-toast";
-import ToastError from "../components/TostError";
+import ToastError from "../components/utils/toastVariant/TostError";
 import { handleError } from "../lib/handlingErrors";
-import ToastSuccess from "../components/TostSuccess";
+import ToastSuccess from "../components/utils/toastVariant/TostSuccess";
 
 function JobsPage() {
   const [isLoading, setLoading] = useState(false);
@@ -168,7 +168,7 @@ function JobsPage() {
 
   return (
     <div className="flex flex-col gap-6 p-4 md:mx-32 lg:mx-64 md:p-6 dark:bg-green-800">
-      <Header
+      <JobsListHeader
         searchTerm={searchTerm}
         sortCriteria={sortCriteria}
         selectedCategory={selectedCategory}
@@ -180,7 +180,11 @@ function JobsPage() {
       {isLoading ? (
         <SkeletonForLoading numberOfJobs={jobsPerPage} />
       ) : filtered.length === 0 && !isLoading ? (
-        <NoResultComponent />
+        <NoResultComponent
+          title={"Oops... No results found"}
+          description="No jobs found with the given search criteria. Please try again with
+        different keywords."
+        />
       ) : (
         <>
           <DndContext
