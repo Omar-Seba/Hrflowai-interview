@@ -19,6 +19,7 @@ import NoResultComponent from "./../components/NoResultComponent";
 import { toast } from "../components/ui/use-toast";
 import ToastError from "../components/TostError";
 import { handleError } from "../lib/handlingErrors";
+import ToastSuccess from "../components/TostSuccess";
 
 function JobsPage() {
   const [isLoading, setLoading] = useState(false);
@@ -81,11 +82,19 @@ function JobsPage() {
           ),
         });
         throw new Error(`HTTP error! Status: ${response.status}`);
+      } else {
+        toast({
+          variant: "success",
+          duration: 2000,
+          action: (
+            <ToastSuccess
+              title={"Success"}
+              message="Jobs have been fetched correctly"
+            />
+          ),
+        });
       }
       const result: JobsResponse = await response.json();
-      console.log(result.meta);
-      console.log(currentPage);
-
       setJobs(result.data.jobs);
       setMeta(result.meta);
       setFiltered(result.data.jobs);
@@ -156,10 +165,6 @@ function JobsPage() {
   useEffect(() => {
     reitriveJobBoard();
   }, [jobsPerPage, currentPage]);
-
-  useEffect(() => {
-    reitriveJobBoard();
-  }, []);
 
   return (
     <div className="flex flex-col gap-6 p-4 md:mx-32 lg:mx-64 md:p-6 dark:bg-green-800">
