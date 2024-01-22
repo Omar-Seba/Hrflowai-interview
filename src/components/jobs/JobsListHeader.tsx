@@ -59,7 +59,6 @@ const JobsListHeader: React.FC<JobsListHeaderProps> = ({
           <Select
             value={sortCriteria}
             onValueChange={(value) => {
-              console.log(value);
               handleSortChange(value);
             }}
           >

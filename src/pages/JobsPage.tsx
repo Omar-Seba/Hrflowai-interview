@@ -65,7 +65,6 @@ function JobsPage() {
     try {
       setLoading(true);
       const url = buildApiUrl(boardKeys, jobsPerPage, currentPage);
-      console.log(options);
       const response = await fetch(url, options);
       const result = await handleApiResponse(response);
       setJobs(result.data.jobs);
@@ -97,7 +96,6 @@ function JobsPage() {
   };
 
   useEffect(() => {
-    console.log("filtering..");
     if (!jobs) return;
     let filtered = [...jobs]; // Create a new array from jobs
 
@@ -105,7 +103,6 @@ function JobsPage() {
     filtered = filterBySelectedCategory(filtered, selectedCategory);
     filtered = sortJobs(filtered, sortCriteria);
 
-    console.log("after filtering..");
     setFiltered(filtered);
     setLoading(false);
   }, [searchTerm, selectedCategory, sortCriteria, jobs]);

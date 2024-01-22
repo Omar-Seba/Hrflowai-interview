@@ -9,7 +9,6 @@ export const buildApiUrl = (
   currentPage: number
 ) => {
   const boardKeysParam = encodeURIComponent(JSON.stringify(boardKeys));
-  console.log(boardKeysParam);
   return `https://api.hrflow.ai/v1/jobs/searching?board_keys=${boardKeysParam}&limit=${jobsPerPage}&page=${currentPage}`;
 };
 
