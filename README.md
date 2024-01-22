@@ -22,7 +22,7 @@ Installs the `serve` package globally on your system. `serve` is a static server
 
 ### `serve -s build`
 
-Starts a static server to serve the contents of the `build` directory. This command launches a web server and makes your production build accessible through a URL, typically `http://localhost:5000`. Use this command to locally test the production build of your application.
+Starts a static server to serve the contents of the `build` directory. This command launches a web server and makes your production build accessible through a URL. Use this command to locally test the production build of your application.
 
 ### `pnpm test`
 

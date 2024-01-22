@@ -15,7 +15,7 @@ const NotFoundPage = () => {
       <h1 className="text-2xl font-bold tracking-tighter sm:text-5xl md:text-5xl lg:text-5xl">
         404 Not Found
       </h1>
-      <p className="max-w-md mt-3 text-gray-500 md:text-xl dark:text-gray-400">
+      <p className="max-w-md mt-3 text-center text-gray-500 md:text-xl dark:text-gray-400">
         Sorry, we couldn't find the page you're looking for.
       </p>
       <Button
