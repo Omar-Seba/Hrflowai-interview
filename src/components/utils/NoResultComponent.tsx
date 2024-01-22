@@ -1,6 +1,5 @@
 import React from "react";
 import noResult from "../../assets/empty-inbox-outline.svg";
-import { Button } from "../ui/button";
 
 interface NoResultComponentProps {
   title: string;

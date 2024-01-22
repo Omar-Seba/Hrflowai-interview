@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Pagination,
   PaginationContent,
@@ -15,7 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Scroll } from "lucide-react";
 import ScrollToTopButton from "./ScrollToTopButton";
 
 interface MyPaginationProps {

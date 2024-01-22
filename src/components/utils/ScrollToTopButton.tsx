@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosArrowDropup } from "react-icons/io";
 import { Button } from "../ui/button";
 
@@ -41,6 +41,7 @@ const ScrollToTopButton = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastScrollTop]);
 
   return (

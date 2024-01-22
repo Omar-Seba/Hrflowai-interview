@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { JobListing, Tags } from "../../types/jobs"; // Import the interfaces from where they are defined
+import { JobListing } from "../../types/jobs"; // Import the interfaces from where they are defined
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { MdDragIndicator } from "react-icons/md";
@@ -10,7 +10,6 @@ import { GoHeartFill } from "react-icons/go";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import JobsList from "../components/jobs/JobsList";
-import { JobListing, JobsResponse } from "../types/jobs";
+import { JobListing } from "../types/jobs";
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -11,20 +11,17 @@ import {
 import { useLocalStorage } from "../utils/LocalStorage";
 import { StoredKeys } from "../utils/LocalStorage";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { boardKeys, options } from "../lib/apiKeys";
+import { boardKeys, options } from "../lib/apiOptions";
 import MyPaginationComponent from "../components/utils/MyPaginationComponent";
 import JobsListHeader from "../components/jobs/JobsListHeader";
 import SkeletonForLoading from "../components/utils/SkeletonForLoading";
 import NoResultComponent from "../components/utils/NoResultComponent";
-import { toast } from "../components/ui/use-toast";
-import ToastError from "../components/utils/toastVariant/TostError";
-import { handleError } from "../lib/handlingErrors";
-import ToastSuccess from "../components/utils/toastVariant/TostSuccess";
 import {
   filterBySearchTerm,
   filterBySelectedCategory,
   sortJobs,
 } from "../components/utils/filtering/filter";
+import { buildApiUrl, handleApiResponse, toastError } from "../lib/apiCall";
 
 function JobsPage() {
   const [isLoading, setLoading] = useState(false);
@@ -65,54 +62,25 @@ function JobsPage() {
   };
 
   const reitriveJobBoard = async () => {
-    let isResponseError = false;
     try {
       setLoading(true);
-      const boardKeysParam = encodeURIComponent(JSON.stringify(boardKeys));
-
-      const url = `https://api.hrflow.ai/v1/jobs/searching?board_keys=${boardKeysParam}&limit=${jobsPerPage}&page=${currentPage}`;
-
+      const url = buildApiUrl(boardKeys, jobsPerPage, currentPage);
+      console.log(options);
       const response = await fetch(url, options);
-      if (!response.ok) {
-        isResponseError = true;
-        console.log(response);
-        toast({
-          variant: "error",
-          duration: 5000,
-          action: (
-            <ToastError
-              title={"Error code: " + response.status}
-              message={handleError(response.status)}
-            />
-          ),
-        });
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      } else {
-        toast({
-          variant: "success",
-          duration: 2000,
-          action: (
-            <ToastSuccess
-              title={"Success"}
-              message="Jobs have been fetched correctly"
-            />
-          ),
-        });
-      }
-      const result: JobsResponse = await response.json();
+      const result = await handleApiResponse(response);
       setJobs(result.data.jobs);
       setMeta(result.meta);
       setFiltered(result.data.jobs);
     } catch (err) {
-      if (!isResponseError)
-        toast({
-          variant: "error",
-          duration: 5000,
-          action: <ToastError title={"Bad request"} />,
-        });
-      console.error(`HTTP error! Status: ${err}`);
+      if (err instanceof Error && err.message.startsWith("HTTP error!")) {
+        // Error already handled in handleApiResponse
+      } else {
+        toastError(500);
+        console.error(`Error: ${err}`);
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const onDragEnd = (event: DragEndEvent) => {
